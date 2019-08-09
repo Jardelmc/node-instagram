@@ -46,6 +46,10 @@ class LoginController {
           whoIUnfollow,
           n_followers,
           n_following,
+          n_whoIFollow,
+          n_whoIUnfollow,
+          n_whoFollowMe,
+          n_whoUnfollowme,
           profile_pic,
         } = user;
 
@@ -58,9 +62,13 @@ class LoginController {
             whoIUnfollow,
             n_followers,
             n_following,
+            n_whoIFollow,
+            n_whoIUnfollow,
+            n_whoFollowMe,
+            n_whoUnfollowme,
             profile_pic,
           },
-          token: jwt.sign({ userPk, password }, authConfig.secret),
+          token: jwt.sign({ userPk, password, login }, authConfig.secret),
         });
       }
     } catch (err) {

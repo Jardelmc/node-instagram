@@ -19,6 +19,15 @@ class Database {
     models.map(model => model.init(this.connection));
   }
 
+  /* mongo() {
+    this.mongoConnection = mongoose.connect(
+      'mongodb+srv://mongodb:mongodb@cluster0-cq7ls.mongodb.net/test',
+      {
+        useNewUrlParser: true,
+      }
+    );
+  } */
+
   mongo() {
     this.mongoConnection = mongoose.connect('mongodb://localhost:27017/test', {
       useNewUrlParser: true,

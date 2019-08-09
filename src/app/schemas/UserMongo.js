@@ -14,6 +14,18 @@ const UserSchema = new mongoose.Schema(
     n_following: {
       type: Number,
     },
+    n_whoIFollow: {
+      type: Number,
+    },
+    n_whoIUnfollow: {
+      type: Number,
+    },
+    n_whoFollowMe: {
+      type: Number,
+    },
+    n_whoUnfollowme: {
+      type: Number,
+    },
     profile_pic: {
       type: String,
     },
