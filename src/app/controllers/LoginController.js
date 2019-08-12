@@ -5,7 +5,7 @@ import authConfig from '../../config/auth';
 import UserController from './UserController';
 
 import User from '../models/User';
-import UserMongo from '../schemas/UserMongo';
+import { getUserAndStalkers } from '../Util/GetUserAndStalked';
 
 class LoginController {
   async login(req, res) {
@@ -36,38 +36,11 @@ class LoginController {
       }
 
       if (response.status === 200) {
-        const user = await UserMongo.findOne({ _id: userPk });
-
-        const {
-          _id,
-          username,
-          whoFollowMe,
-          whoIFollow,
-          whoIUnfollow,
-          n_followers,
-          n_following,
-          n_whoIFollow,
-          n_whoIUnfollow,
-          n_whoFollowMe,
-          n_whoUnfollowme,
-          profile_pic,
-        } = user;
+        const { user, stalkedUserList } = await getUserAndStalkers(userPk);
 
         return res.json({
-          user: {
-            _id,
-            username,
-            whoFollowMe,
-            whoIFollow,
-            whoIUnfollow,
-            n_followers,
-            n_following,
-            n_whoIFollow,
-            n_whoIUnfollow,
-            n_whoFollowMe,
-            n_whoUnfollowme,
-            profile_pic,
-          },
+          user,
+          stalkedUserList,
           token: jwt.sign({ userPk, password, login }, authConfig.secret),
         });
       }

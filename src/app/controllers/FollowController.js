@@ -47,6 +47,16 @@ class FollowController {
       return res.status(400).json({ status: 'fail' });
     }
   }
+
+  async unfollowAll(req, res) {
+    try {
+      await axios.put(`${process.env.BASE_URL}/unfollow/${req.login}/all`);
+
+      return res.status(200).json({ status: 'ok' });
+    } catch (error) {
+      return res.status(400).json({ status: 'fail' });
+    }
+  }
 }
 
 export default new FollowController();

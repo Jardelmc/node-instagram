@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const UserSchema = new mongoose.Schema(
+const StalkerSchema = new mongoose.Schema(
   {
     _id: {
       type: Number,
@@ -29,12 +29,7 @@ const UserSchema = new mongoose.Schema(
     profile_pic: {
       type: String,
     },
-    userFollowers: {
-      type: Array,
-    },
-    userFollowing: {
-      type: Array,
-    },
+
     whoFollowMe: {
       type: Array,
     },
@@ -47,11 +42,14 @@ const UserSchema = new mongoose.Schema(
     whoIFollow: {
       type: Array,
     },
-    usersStalked: {
+    userFollowers: {
+      type: Array,
+    },
+    userFollowing: {
       type: Array,
     },
   },
-  { collection: 'user' }
+  { collection: 'user_stalked' }
 );
 
-export default mongoose.model('UserMongo', UserSchema);
+export default mongoose.model('StalkerMongo', StalkerSchema);
