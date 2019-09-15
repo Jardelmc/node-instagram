@@ -15,7 +15,7 @@ const UserPayloadSchema = new mongoose.Schema(
       type: Boolean,
     },
   },
-  { collection: 'user-payload' }
+  { collection: 'user-payload', timestamps: true }
 );
 
 export default mongoose.model('UserPayloadMongo', UserPayloadSchema);

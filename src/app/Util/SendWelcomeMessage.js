@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable import/prefer-default-export */
@@ -19,6 +20,8 @@ const promorionalCodeArray = [];
 export async function sendWelcomeMessage(newMatchers, userLogin, userPk) {
   const { messages } = await WelcomeMessageMongo.findById(userPk).lean();
 
+  let newPromotionalCode;
+
   for (const [key, value] of newMatchers) {
     const code = await getNewCode();
 
@@ -26,7 +29,7 @@ export async function sendWelcomeMessage(newMatchers, userLogin, userPk) {
 
     selectedMessage = selectedMessage.replace('CODE', code);
 
-    const newPromotionalCode = {
+    newPromotionalCode = {
       _id: code,
       profileTargetPk: key,
       profileMasterPk: userPk,
@@ -43,7 +46,9 @@ export async function sendWelcomeMessage(newMatchers, userLogin, userPk) {
     promorionalCodeArray
   );
 
-  if (response.body.message === 'Ok') {
+  newPromotionalCode = null;
+
+  if (response.status === 200) {
     return 'Ok';
   }
   return 'fail';

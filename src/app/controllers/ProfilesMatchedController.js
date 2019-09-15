@@ -49,7 +49,7 @@ class ProfilesMatchedController {
     );
 
     // Recolocando nova lista de matches pra salvar no banco
-    matchedProfiles = matchedProfilesAndNewMatches.machedProfiles;
+    matchedProfiles = matchedProfilesAndNewMatches.matchedProfiles;
 
     await UserMongo.findOneAndUpdate(
       { _id: req.userPk },

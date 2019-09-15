@@ -1,3 +1,5 @@
+// Este controller é para fazer a gestão das mensagens que são enviadas quando é encontrado um novo match
+
 import WelcomeMessagesMongo from '../schemas/WelcomeMessagesMongo';
 
 class WelcomeMessagesController {

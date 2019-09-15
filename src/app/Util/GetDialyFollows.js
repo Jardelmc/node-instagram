@@ -25,12 +25,13 @@ export async function getSelectedProfilesToFollow(
 
   const arrayAllProfilesWhoIFollow = Object.keys(whoIFollow);
 
-  const profilesNeverFollowed = [];
+  let profilesNeverFollowed = [];
 
   allProvidersAndProfilesToFollow.forEach(provider => {
     const { profiles } = provider;
 
     const listPks = [];
+
     profiles.forEach(profileId => {
       if (
         !arrayAllFollowedProfiles.includes(profileId) &&
@@ -46,6 +47,17 @@ export async function getSelectedProfilesToFollow(
     };
 
     profilesNeverFollowed.push(providerWithProfiles);
+  });
+
+  // Pegando apenas a quantidade necessária de cada perfil
+  const limitProfilesForProviders =
+    process.env.MAX_FOLLOWERS_DIALY / allProvidersAndProfilesToFollow.length;
+
+  profilesNeverFollowed = profilesNeverFollowed.map(providerId => {
+    return {
+      provider: providerId.provider,
+      profiles: providerId.profiles.slice(0, limitProfilesForProviders),
+    };
   });
 
   return profilesNeverFollowed;

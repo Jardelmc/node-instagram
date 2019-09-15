@@ -4,10 +4,10 @@ import randomstring from 'randomstring';
 import PromotionalCodeMongo from '../schemas/PromotionalCodeMongo';
 
 export async function getNewCode() {
-  let code = randomstring.generate(4);
+  let code = randomstring.generate(5);
   code = code.toUpperCase();
 
-  const codeExists = await PromotionalCodeMongo.findById(code).lean();
+  const codeExists = await PromotionalCodeMongo.findOne({ _id: code }).lean();
 
   if (!codeExists) {
     return code;
