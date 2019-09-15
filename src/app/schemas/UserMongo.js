@@ -8,47 +8,35 @@ const UserSchema = new mongoose.Schema(
     username: {
       type: String,
     },
-    n_followers: {
-      type: Number,
-    },
-    n_following: {
-      type: Number,
-    },
-    n_whoIFollow: {
-      type: Number,
-    },
-    n_whoIUnfollow: {
-      type: Number,
-    },
-    n_whoFollowMe: {
-      type: Number,
-    },
-    n_whoUnfollowme: {
-      type: Number,
-    },
-    profile_pic: {
-      type: String,
-    },
-    userFollowers: {
-      type: Array,
-    },
-    userFollowing: {
-      type: Array,
+    whoIFollow: {
+      type: Object,
     },
     whoFollowMe: {
-      type: Array,
+      type: Object,
     },
-    whoUnfollowMe: {
-      type: Array,
+    whoFollowedBySystem: {
+      type: Object,
     },
-    whoIUnfollow: {
-      type: Array,
+    whoUnfollowedBySystem: {
+      type: Object,
     },
-    whoIFollow: {
-      type: Array,
+    followedUsersAtDate: {
+      type: Object,
     },
-    usersStalked: {
-      type: Array,
+    unfollowedUsersAtDate: {
+      type: Object,
+    },
+    nFollowers: {
+      type: Map,
+    },
+    nFollowing: {
+      type: Map,
+    },
+    targetProfiles: {
+      type: Object,
+    },
+    matchedProfiles: {
+      type: Map,
     },
   },
   { collection: 'user' }

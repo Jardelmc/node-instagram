@@ -2,27 +2,35 @@ import { Router } from 'express';
 import authMiddleware from './app/middlewares/auth';
 
 import LoginController from './app/controllers/LoginController';
-import DashboardController from './app/controllers/DashboardController';
-import FollowController from './app/controllers/FollowController';
-import StalkerController from './app/controllers/StalkerController';
+import UserController from './app/controllers/UserController';
+import TargetProfileController from './app/controllers/TargetProfileController';
+import DialyFollowController from './app/controllers/DialyFollowController';
+import DialyUnfollowController from './app/controllers/DialyUnfollowController';
+import WelcomeMessagesController from './app/controllers/WelcomeMessagesController';
+import ProfilesMatchedController from './app/controllers/ProfilesMatchedController';
+
 import TestController from './Test/TestController';
 
 const routes = new Router();
 
-routes.post('/api/front/login', LoginController.login);
+routes.post('/', TestController.getMongo);
+
+routes.post('/login', LoginController.login);
 
 routes.use(authMiddleware);
 
-routes.get('/api/front/dashboard', DashboardController.index);
+routes.post('/users/create', UserController.create);
 
-routes.put('/api/front/follow/user/one', FollowController.followOne);
-routes.put('/api/front/follow/user/all', FollowController.followAll);
+routes.post(
+  '/users/targetprofile/:targetprofile/add',
+  TargetProfileController.create
+);
 
-routes.put('/api/front/unfollow/user/one', FollowController.unfollowOne);
-routes.put('/api/front/unfollow/user/all', FollowController.unfollowAll);
+routes.get('/getfollow', DialyFollowController.create);
+routes.get('/getunfollow', DialyUnfollowController.create);
 
-routes.put('/api/front/stalker', StalkerController.index);
+routes.put('/welcomemessages', WelcomeMessagesController.update);
 
-routes.get('/', TestController.getMongo);
+routes.get('/checkfornewmatches', ProfilesMatchedController.update);
 
 export default routes;

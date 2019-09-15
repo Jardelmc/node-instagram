@@ -1,14 +1,18 @@
+import { subDays, format } from 'date-fns';
 import UserMongo from '../app/schemas/UserMongo';
-
-import { getUserAndStalkers } from '../app/Util/GetUserAndStalked';
+import { decrypt, encrypt } from '../app/Util/EncryptDecryptUtil';
 
 class TestController {
   async getMongo(req, res) {
-    // const data = UserMongo.create({ username: 'jardel' });
+    let data = new Date();
 
-    const user = await getUserAndStalkers(3574934963);
+    data = subDays(data, 4);
 
-    return res.json(user);
+    const formattedData = format(data, "yyyy'-'MM'-'dd");
+
+    // const data = await UserMongo.findById(req.body.id).lean();
+
+    return res.json(formattedData);
   }
 }
 

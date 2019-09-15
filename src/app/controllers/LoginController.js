@@ -1,17 +1,26 @@
+/* eslint-disable no-underscore-dangle */
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-
 import authConfig from '../../config/auth';
-import UserController from './UserController';
+import { encrypt } from '../Util/EncryptDecryptUtil';
 
-import User from '../models/User';
-import { getUserAndStalkers } from '../Util/GetUserAndStalked';
+import MapPasswordsMongo from '../schemas/MapPasswordsMongo';
 
 class LoginController {
   async login(req, res) {
-    const { login, password_hash } = req.body;
+    const { login, password } = req.body;
 
-    const password = password_hash;
+    let userCredential = await MapPasswordsMongo.findById(login).lean();
+
+    if (!userCredential) {
+      userCredential = new MapPasswordsMongo({
+        _id: login,
+        login,
+        password_hash: encrypt(password),
+      });
+
+      await userCredential.save();
+    }
 
     try {
       const response = await axios.post(`${process.env.BASE_URL}/login`, {
@@ -20,35 +29,22 @@ class LoginController {
       });
 
       if (response.status !== 200) {
-        return res.status(401).json({ error: 'loginFail' });
+        return res.status(401).json({ error: response.body });
       }
 
       const instagram_pk = response.data;
       const userPk = Number(instagram_pk);
 
-      const userExists = await User.findOne({
-        where: { instagram_pk: userPk },
-      });
-
-      if (!userExists) {
-        req.body.instagram_pk = userPk;
-        await UserController.store(req);
-      }
-
       if (response.status === 200) {
-        const { user, stalkedUserList } = await getUserAndStalkers(userPk);
-
         return res.json({
-          user,
-          stalkedUserList,
-          token: jwt.sign({ userPk, password, login }, authConfig.secret),
+          token: jwt.sign({ userPk, login }, authConfig.secret),
         });
       }
     } catch (err) {
-      return res.status(401).json({ error: 'Erro ao fazer login' });
+      return res.status(403).json({ error: 'Erro ao fazer login' });
     }
 
-    return res.status(401).json({ error: 'Erro ao fazer login' });
+    return res.status(403).json({ error: 'Erro ao fazer login' });
   }
 }
 
