@@ -3,28 +3,28 @@ import mongoose from 'mongoose';
 const UserSchema = new mongoose.Schema(
   {
     _id: {
-      type: Number,
+      type: String,
     },
     username: {
       type: String,
     },
     whoIFollow: {
-      type: Object,
+      type: Array,
     },
     whoFollowMe: {
-      type: Object,
+      type: Array,
     },
     whoFollowedBySystem: {
-      type: Object,
+      type: Map,
     },
     whoUnfollowedBySystem: {
-      type: Object,
+      type: Map,
     },
     followedUsersAtDate: {
-      type: Object,
+      type: Map,
     },
     unfollowedUsersAtDate: {
-      type: Object,
+      type: Map,
     },
     nFollowers: {
       type: Map,
@@ -33,10 +33,31 @@ const UserSchema = new mongoose.Schema(
       type: Map,
     },
     targetProfiles: {
-      type: Object,
+      type: Map,
+    },
+    targetHashtags: {
+      type: Map,
     },
     matchedProfiles: {
       type: Map,
+    },
+    allProfilesAlreadySystemInteracted: {
+      type: Array,
+    },
+    profilesSelectedToFollowDialy: {
+      type: Object, // Para controle da API python {providerTarget, providerHashtag, date}
+    },
+    statusOperationFollowDialy: {
+      type: Boolean,
+    },
+    statusOperationUnfollowDialy: {
+      type: Boolean,
+    },
+    sendDirect: {
+      type: Boolean,
+    },
+    messagesToSendDirect: {
+      type: Array,
     },
   },
   { collection: 'user' }

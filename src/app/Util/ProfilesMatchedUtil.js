@@ -20,15 +20,24 @@ export async function checkNewMatches(
     }
   });
 
+  // tempFollowedProfiles fica salvo no banco como um array, e cada objeto tem um campo: provider e profileFollow
+  // Precisa converter esse array em um Map no modelo no qual é salvo os matchedProfiles
+  const tempFollowedProfilesMap = new Map();
   if (tempFollowedProfiles) {
-    tempFollowedProfiles = new Map(Object.entries(tempFollowedProfiles));
-  } else {
-    tempFollowedProfiles = new Map();
+    tempFollowedProfiles.forEach(followedProfileInfo => {
+      const mapObject = {
+        provider: followedProfileInfo.provider,
+        dateWhenFollowed: new Date(),
+      };
+
+      const key = String(followedProfileInfo.profileFollow);
+      tempFollowedProfilesMap.set(key, mapObject);
+    });
   }
 
-  tempFollowedProfiles.forEach((value, key) => {
+  tempFollowedProfilesMap.forEach((value, key) => {
     // Se usuário seguido está na lista de seguidores atuais e ainda não foi computado, será
-    if (currentFollowers.includes(key) && !matchedProfiles.has(key)) {
+    if (currentFollowers.includes(Number(key)) && !matchedProfiles.has(key)) {
       newMatches.set(key, value); // Adicionando usuário matched ao Map para envio de direct
 
       matchedProfiles.set(key, value);

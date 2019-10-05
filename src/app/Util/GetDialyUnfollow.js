@@ -3,22 +3,28 @@
 /* eslint-disable import/prefer-default-export */
 import { subDays, format } from 'date-fns';
 
-export function getProfilesToUnfollow(followedUsersAtDate, currentFollowers) {
-  const allDataMap = new Map(Object.entries(followedUsersAtDate));
+export function getProfilesToUnfollow(whoFollowedBySystem, currentFollowers) {
+  const PAST_DATE = 1; // Quantos dias atrás a pessoa foi seguida
 
-  let date = new Date();
+  const userIdsOfFollowedInPastDate = [];
 
-  date = subDays(date, 0);
+  // Pegando data atual e diminuindo 4 dias e formatando para o padrão a ser comparado
+  let targetDate = new Date();
+  targetDate = subDays(targetDate, PAST_DATE);
+  targetDate = format(targetDate, "yyyy'-'MM'-'dd");
 
-  const datePast4Days = format(date, "yyyy'-'MM'-'dd");
+  // Key = userFollowedId, Value = {provider, data}
+  whoFollowedBySystem.forEach((value, key) => {
+    let dateWhenFollowed = value.data; // Pegando a data
+    dateWhenFollowed = format(dateWhenFollowed, "yyyy'-'MM'-'dd");
 
-  const followedUsersPast4Days = allDataMap.get(datePast4Days);
-
-  const dialyUnfollowListPk = followedUsersPast4Days.filter(profile => {
-    if (!currentFollowers.includes(profile)) {
-      return profile;
+    // Se a data que o perfil foi seguido for igual a targetData (dias que o sistema espera antes de dar unfollow)
+    // No segundo parấmetro é checado se o perfil não está na lista de seguidores atuais
+    if (dateWhenFollowed === targetDate && !currentFollowers.includes(key)) {
+      userIdsOfFollowedInPastDate.push(key);
     }
   });
 
-  return dialyUnfollowListPk;
+  // Retorna ["userIds..."] para serem Unfollows
+  return userIdsOfFollowedInPastDate;
 }

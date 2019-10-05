@@ -5,30 +5,43 @@ import { getProfilesToUnfollow } from '../Util/GetDialyUnfollow';
 
 class DialyUnfollowController {
   async create(req, res) {
-    const user = await UserMongo.findById(req.userPk).lean();
+    const user = await UserMongo.findById(req.userPk);
 
-    const { followedUsersAtDate } = user;
+    // Preciso ver quem que o programa seguiu na data D-4 e pegar destes os que não estão na lista de seguidores atualmente
+    const { whoFollowedBySystem, username } = user;
 
     // Chamada para pegar seguidores atualizados
-    let response = await axios.get(
-      `${process.env.BASE_URL}/getlistfollwers/${req.login}`
-    );
+    let response = await axios.post(`${process.env.BASE_URL}/usersByUsername`, {
+      userId: req.userPk,
+      targetProfile: username,
+    });
 
     const currentFollowers = response.data;
 
     const dialyUnfollowListPk = getProfilesToUnfollow(
-      followedUsersAtDate,
+      whoFollowedBySystem,
       currentFollowers
     );
 
-    if (dialyUnfollowListPk.length > 0) {
-      response = await axios.post(
-        `${process.env.BASE_URL}/dialyunfollow/${req.login}`,
-        dialyUnfollowListPk
-      );
-    }
+    // Preparando objeto para Api Python reconhecer a origem e os perfis
+    const dataFollowToPythonApi = {
+      userId: String(req.userPk),
+      profiles: dialyUnfollowListPk,
+      token: req.token,
+    };
 
-    return res.json({ message: 'Ok' });
+    // Código para enviar lista para API Java, desativado pq to tentando fazer follow pelo python
+    response = await axios.post(
+      `${process.env.BASE_URL}/unfollowDialy`,
+      dataFollowToPythonApi
+    );
+
+    if (response.status === 200) {
+      return res.status(200).json({ message: 'Ok' });
+    }
+    return res
+      .status(400)
+      .json({ error: 'Serviço de Unfollow Dialy não iniciado' });
   }
 }
 

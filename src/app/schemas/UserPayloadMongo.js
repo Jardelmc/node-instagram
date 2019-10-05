@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const UserPayloadSchema = new mongoose.Schema(
   {
     _id: {
-      type: Number,
+      type: String,
     },
     lastFollowersListPk: {
       type: Array,
@@ -15,7 +15,7 @@ const UserPayloadSchema = new mongoose.Schema(
       type: Boolean,
     },
   },
-  { collection: 'user-payload', timestamps: true }
+  { collection: 'user_payload', timestamps: true }
 );
 
 export default mongoose.model('UserPayloadMongo', UserPayloadSchema);

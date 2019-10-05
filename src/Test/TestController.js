@@ -4,11 +4,11 @@ import { decrypt, encrypt } from '../app/Util/EncryptDecryptUtil';
 
 class TestController {
   async getMongo(req, res) {
-    let data = new Date();
+    const data = new Date();
 
-    data = subDays(data, 4);
+    const user = await UserMongo.findById(1978473999).lean();
 
-    const formattedData = format(data, "yyyy'-'MM'-'dd");
+    const payload = 1;
 
     // const data = await UserMongo.findById(req.body.id).lean();
 

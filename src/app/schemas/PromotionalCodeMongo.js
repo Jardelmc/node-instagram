@@ -14,8 +14,12 @@ const PromotionalCodeSchema = new mongoose.Schema(
     message: {
       type: String,
     },
+    avaliable: {
+      type: Boolean,
+      default: true,
+    },
   },
-  { collection: 'promotional-code', timestamps: true }
+  { collection: 'promotional_code', timestamps: true }
 );
 
 export default mongoose.model('PromotionalCodeMongo', PromotionalCodeSchema);

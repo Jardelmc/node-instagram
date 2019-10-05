@@ -15,12 +15,11 @@ class Database {
   } */
 
   mongo() {
-    this.mongoConnection = mongoose.connect(
-      'mongodb://localhost:27017/instagram4bussines',
-      {
-        useNewUrlParser: true,
-      }
-    );
+    const uri = process.env.MONGO_URL_MAIN;
+    this.mongoConnection = mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useFindAndModify: false,
+    });
   }
 }
 

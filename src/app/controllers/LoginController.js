@@ -32,8 +32,7 @@ class LoginController {
         return res.status(401).json({ error: response.body });
       }
 
-      const instagram_pk = response.data;
-      const userPk = Number(instagram_pk);
+      const userPk = String(response.data.userId);
 
       if (response.status === 200) {
         return res.json({
